@@ -725,13 +725,13 @@ console.log(avgTips(johnBills.tips))
 console.log(avgTips(markBills.tips))
 
 // 7.
-avgTipsJohn = avgTips(johnBills.tips)
-avgTipsMark = avgTips(markBills.tips)
+johnBills.average = avgTips(johnBills.tips)
+markBills.average = avgTips(markBills.tips)
 
 // 8.
-if(avgTipsJohn > avgTipsMark) {
+if(johnBills.average > markBills.average) {
     console.log("John's fammily has highest tips on average ");
-} else if (avgTipsMark > avgTipsJohn) {
+} else if (markBills.average > johnBills.average) {
     console.log("Mark's fammily has highest tips on average ");
 } else {
     console.log('Both families have the same average');
