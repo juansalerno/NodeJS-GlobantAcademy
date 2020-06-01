@@ -1,0 +1,5 @@
+primitive data type: means that it's not for objects, unlike most thing in JavaScript
+
+type coercion: means that JS automatically converts types from one to another as it's needed
+
+function expressions produce an immediate result, while function declarations do not.
