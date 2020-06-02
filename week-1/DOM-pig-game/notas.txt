@@ -1,0 +1,7 @@
+textContent = solo para texto plano
+innerHTML = podes mandar contenido HTML (siempre dentro de un string)
+
+callback function = it's a function that is not called by us but by another function. Is wich we pass into another function as an 
+argument, and this function will then call that for us.
+
+anonymous functions = dont have a name, so cant be reused
