@@ -202,12 +202,13 @@ const box66 = {
 box66.clickMe();
  */
 
+/*
 function Person(name) {
     this.name = name;
 }
 
 // ES5
-/* 
+ 
 Person.prototype.myFriends5 = function(friends) {
 
     var arr = friends.map(function(el) {
@@ -220,7 +221,7 @@ Person.prototype.myFriends5 = function(friends) {
 
 var friends = ['Bob', 'Jane', 'Mark'];
 new Person('John').myFriends5(friends);
- */
+
 
 // ES6
 // Best solution:
@@ -234,7 +235,402 @@ Person.prototype.myFriends6 = function(friends) {
 }
 
 new Person('Mike').myFriends6(friends); 
+ */
 
+
+
+// -----------------------------------------------------------
+// DESTRUCTURING
+
+// ES5
+/* 
+var john = ['John', 26];
+var name = john[0];
+var age = john[1]; 
+*/
+
+
+// ES6
+/* 
+const [name, age] = ['John', 26]
+console.log(name);
+console.log(age);
+
+const obj = {
+    firstName: 'John',
+    lastName: 'Smith'
+}
+// con objetos las variables tienen que llamarse igual que las keys del objeto
+const {firstName, lastName} = obj;
+console.log(firstName);
+console.log(lastName);
+
+// Si queres que no coincida el nombre de la variable con las keys del objeto:
+const {firstName: a, lastName: b} = obj;
+console.log(a);
+console.log(b);
+
+
+function calcAgeRetirement(yearOfBirth) {
+    const age = new Date().getFullYear() - yearOfBirth;
+    return [age, 65 - age];
+}
+
+const [age2, retirement] = calcAgeRetirement(1990);
+console.log(age2);
+console.log(retirement)
+ */
+
+
+
+//  ----------------------------------------------------------------
+// ARRAYS
+
+// const boxes = document.querySelectorAll('.box');
+
+// ES5
+/* 
+var boxesArray5 = Array.prototype.slice.call(boxes);
+boxesArray5.forEach(function(cur) {
+    cur.style.backgroundColor = 'dodgerblue'
+})
+*/
+
+//  ES6
+/* 
+const boxesArray6 = Array.from(boxes)
+Array.from(boxes).forEach(cur => cur.style.backgroundColor = 'dodgerblue');
+*/
+
+// si queres hacer breaks o continue dentro del loop, el foreach y el map no sirven, entonces:
+
+// ES5
+/* for(var i=0; i < boxesArray5.length; i++) {
+    if(boxesArray5[i].className === 'box blue') {
+        continue; // si se da la condicion, el loop pasa directamente al elemento siguiente sin hacer nada con este elemento
+        // break; // el loop se frena y no continua más
+    }
+
+    boxesArray5[i].textContent = 'I changed to blue!'
+}
+ */
+/* 
+// ES6
+for(const cur of boxesArray6) {
+    if (cur.className.includes('blue')) {
+        continue;
+    }
+    cur.textContent = 'I changed to blue!'
+}
+
+// buscar elementos en un array:
+
+// ES5
+var ages = [12, 17, 8, 21, 14, 11];
+
+var full = ages.map(function(cur) {
+    return cur >= 18;
+})
+console.log(full);
+
+console.log(full.indexOf(true));
+console.log(ages[full.indexOf(true)]);
+
+
+// ES6
+console.log(ages.findIndex(cur => cur >= 18)); // retorna el indice del primer elemento que cumple la condicion
+console.log(ages.find(cur => cur >= 18)); // retorna el primer elemento que cumple la condicion 
+ */
+
+
+
+
+// -----------------------------------------------------------------
+// SPREAD OPERATOR (...)
+/* 
+function addFourAges (a, b, c, d) {
+    return a + b + c + d
+}
+
+var sum1 = addFourAges(18, 30, 12, 21)
+console.log(sum1);
+
+// ES5
+var ages = [18, 30, 12, 21];
+var sum2 = addFourAges.apply(null, ages); 
+
+// apply method take this array and then call the function using the elements 
+// of the array as the arguments. The first argument of the method we specify the this variable, in this case doesnt matter so can be null
+
+console.log(sum2)
+
+// ES6
+const sum3 = addFourAges(...ages) // the ... expands this array into it's components
+console.log(sum3)
+
+// Joining two arrays:
+
+const familySmith = ['John', 'Jane', 'Mark'];
+const familyMiller = ['Mary', 'Bob', 'Ann'];
+const bigFamily = [...familySmith, 'Lily', ...familyMiller];
+console.log(bigFamily);
+
+// use case con nodes:
+const h = document.querySelector('h1');
+const boxes = document.querySelectorAll('.box');
+const all = [h, ...boxes]; // la constante all no es un array ya haciendo esto??
+
+Array.from(all).forEach(cur => cur.style.color = 'purple');
+ */
+
+// --------------------------------------------------------------
+// REST PARAMETERS
+// recieve a couple of single values and transforms them into an array when we call a function with multiple parameters
+
+/* 
+// ES5
+function isFullAge5() {
+    // console.log(arguments);
+    var argsArr = Array.prototype.slice.call(arguments);
+
+    argsArr.forEach(function(cur) {
+        console.log((2016 - cur) >= 18)
+    })
+}
+// isFullAge5(1990, 1999, 1965);
+// isFullAge5(1990, 1999, 1965, 2016, 1987);
+
+// ES6
+function isFullAge6(...years) {
+    years.forEach(cur => console.log((2016 - cur) >= 18));
+} // cuando llamas a la funcion el operador transforma los argumentos en un array y los pasa a la funcion
+
+isFullAge6(1990, 1999, 1965);
+isFullAge6(1990, 1999, 1965, 2016, 1987)
+ */
+// DIFFERENCE BETWEEN SPREAD OPRATOR AND REST PARAMETERS:
+// Is actually the place in wic we use each of them:
+// The Spread operator is used in the function call while the rest operator is used in the function declaration
+
+// ES5
+/* 
+function isFullAge5(limit) {
+    console.log(arguments);
+    var argsArr = Array.prototype.slice.call(arguments, 1); // at position 1 it will start to copy to an  array
+    console.log(argsArr)
+
+    argsArr.forEach(function(cur) {
+        console.log((2016 - cur) >= limit)
+    })
+}
+isFullAge5(16, 1990, 1999, 1965);
+isFullAge5(1990, 1999, 1965, 2016, 1987);
+ */
+
+// ES6
+/* 
+function isFullAge6(limit, ...years) {
+    years.forEach(cur => console.log((2016 - cur) >= limit));
+} // cuando llamas a la funcion el operador transforma los argumentos en un array y los pasa a la funcion
+
+isFullAge6(21, 1990, 1999, 1965);
+isFullAge6(16, 1990, 1999, 1965, 2016, 1987)
+*/
+
+// -------------------------------------------------------------
+// DEFAULT PARAMETERS
+
+// ES5
+/* 
+function SmithPerson (firstName, yearOfBirth, lastName, nationality) {
+
+    lastName === undefined ? lastName = 'Smith' : lastName = lastName
+    nationality === undefined ? nationality = 'american' : nationality = nationality
+
+    this.firstName = firstName;
+    this.yearOfBirth = yearOfBirth;
+    this.lastName = lastName;
+    this.nationality = nationality;
+}
+ */
+// ES6
+
+/* 
+function SmithPerson (firstName, yearOfBirth, lastName = 'Smith', nationality = 'American') {
+    this.firstName = firstName;
+    this.yearOfBirth = yearOfBirth;
+    this.lastName = lastName;
+    this.nationality = nationality;
+}
+
+var john = new SmithPerson('John', 1900)
+var emily = new SmithPerson('Emily', 1983, 'Diaz', 'spanish');
+
+ */
+
+
+// -----------------------------------------------------------------
+// MAPS
+/* A map is a new key-value data structure in ES6. 
+In maps, we can use anything for the keys. So in objects we are limited to strings, but in maps we can use any kind 
+of primitive value, even functions or objects for keys
+*/
+
+// const question = new Map();
+// question.set('question', 'What is the official name of latest major JavaScript version?');
+// question.set(1, 'ES5');
+// question.set(2, 'ES6');
+// question.set(3, 'ES2015');
+// question.set(4, 'ES7');
+// question.set('correct', 3);
+// question.set(true, 'Correct answer :D');
+// question.set(false, 'Wrong, please try again!')
+
+// console.log(question.get('question'));
+// console.log(question.size)
+
+// if (question.has(4)) {
+//     // question.delete(4);
+//     console.log('Answer 4  is here')
+// }
+
+// question.clear();
+
+// question.forEach((value, key) => console.log(`This is ${key}, and it's set to ${value}`));
+
+// for (let [key, value] of question.entries()) {
+//     if(typeof(key) === 'number') {
+//         console.log(`Answer ${key}: ${value}`)
+//     }
+// }
+
+// const ans = parseInt(prompt('Write the correct answer'));
+// console.log(question.get(ans === question.get('correct')));
+
+// SUMMARY WHY MAPS ARE BETTER THAN OBJECTS TO CREATE HASH MAPS:
+// 1. we can use anything as keys, as open a lot of possibilities
+// 2. maps are iterable, and making it very easy to loop through them and to manupilate data with them
+// 3. it's easy to get the size of a map using the size property
+// 4. we can easily add and remove data from a map
+
+
+
+// ------------------------------------------------------------------------------------------
+// CLASSES
+
+// ES5
+/* var Person5 = function(name, yearOfBirth, job) {
+    this.name = name;
+    this.yearOfBirth = yearOfBirth;
+    this.job = job;
+}
+
+Person5.prototype.calculateAge = function() {
+    var age = new Date().getFullYear() - this.yearOfBirth;
+    console.log(age)
+}
+
+var john5 = new Person5('John', 1990, 'teacher');
+
+// ES6
+class Person6 {
+    constructor (name, yearOfBirth, job) {
+        this.name = name;
+        this.yearOfBirth = yearOfBirth;
+        this.job = job;
+    }
+
+    calculateAge() {
+        let age = new Date().getFullYear() - this.yearOfBirth;
+        console.log(age)
+    }
+
+    static greeting() {
+        console.log('Hey there!');
+    }
+
+}
+
+let john6 = new Person6('John', 1990, 'teacher');
+
+// static methods: are methods that are simply attached to the class, but not inherited by the class instances, so by objects that we create through that class.
+
+Person6.greeting();
+ */
+// Tips:
+/*  
+First, the class definitions are not hoisted, so unlike function constructors, we need to first implement a class, and only later 
+in our code we can start using it. 
+And second, we can only add methods to classes, but not properties.
+But that's not a problem at all, because inheriting properties through the object instances is not a best practice anyway. 
+*/
+
+// -----------------------------------------------------------------------------
+// CLASSES AND SUBCLASSES
+
+// ES5
+var Person5 = function(name, yearOfBirth, job) {
+    this.name = name;
+    this.yearOfBirth = yearOfBirth;
+    this.job = job;
+}
+
+Person5.prototype.calculateAge = function() {
+    var age = new Date().getFullYear() - this.yearOfBirth;
+    console.log(age)
+}
+
+var Athlete5 = function(name, yearOfBirth, job, olimpicGames, medals) {
+    Person5.call(this, name, yearOfBirth, job)
+    this.olimpicGames = olimpicGames;
+    this.medals = medals;
+}
+
+
+Athlete5.prototype = Object.create(Person5.prototype) // now the 2 function constructors are connected
+
+Athlete5.prototype.wonMedal = function () {
+    this.medals++;
+    console.log(this.medals)
+}
+
+var johnAthlete5 = new Athlete5('John', 1990, 'swimmer', 3, 10);
+
+johnAthlete5.calculateAge();
+johnAthlete5.wonMedal();
+
+
+// ES6
+class Person6 {
+    constructor (name, yearOfBirth, job) {
+        this.name = name;
+        this.yearOfBirth = yearOfBirth;
+        this.job = job;
+    }
+
+    calculateAge() {
+        let age = new Date().getFullYear() - this.yearOfBirth;
+        console.log(age)
+    }
+}
+
+class Athlete6 extends Person6 {
+    constructor(name, yearOfBirth, job, olimpicGames, medals) {
+        super(name, yearOfBirth, job);
+        this.olimpicGames = olimpicGames;
+        this.medals = medals;
+    }
+
+    wonMedal() {
+        this.medals++
+        console.log(this.medals)
+    }
+}
+
+const johnAthlete6 = new Athlete6('John', 1990, 'swimmer', 3, 10);
+
+johnAthlete6.calculateAge();
+johnAthlete6.wonMedal();
 
 
 
