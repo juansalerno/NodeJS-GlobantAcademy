@@ -120,5 +120,5 @@ elements.recipe.addEventListener('click', e => {
 		state.recipe.updateServings('inc');
 		recipeView.updateServingsIngredients(state.recipe);
 	}
-	console.log(state.recipe);
+	// console.log(state.recipe);
 })
