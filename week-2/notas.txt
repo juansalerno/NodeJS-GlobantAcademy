@@ -1,0 +1,43 @@
+---------> WHAT IS NODE?
+Whit Node.js, JavaScrit developers could now use JS on the server side, so they could use the same JS programming language
+to create web servers, command line interfaces, application back-ends, ect..
+
+So, Node.js is a way to run JS code on the server as opposed to being forced to run it on the client in the browser.
+
+
+---------> HOW?
+- Is a JS runtime built on Chrome's V8 JavaScript Engine: 
+Node.js uses the V8 JavaScript engine and that is the same JavaScript engine that powers the Chrome browser 
+(V8 is a Google open source project).
+The job of the JS engine (whether is V8 or any of the other ones out there) is to take in JS code and compile it down to machine code 
+taht the machine can actually execute.
+V8 engine is written in C++ programming language.
+Both Chrome and Node.js are largely written in C++
+
+Node.js IS NOT A PROGRAMMING LANGUAGE. It is a JS runtime. The runtime is something that provides custom functionality, so various
+tools and libraries specific to an environment.
+
+So, in the case of Chrome, it provides V8 with various objects and functions taht allows javascript developers in the Chrome browser
+to do things like add a button click event or manipulate the DOM.
+Node doesn't provide those things, instead the Node runtime provide various tools taht node developers need: libraries for setting up
+web servers integrating with the file system, so you can read and write from disk, etc.
+
+At the end of the day, both Chrome and Node.js are just creating their own version of JavaScript. Is the same core JS language but
+with custom functions and objects injected.
+
+So, we have a series of methods that can be used in our javascript code wich are in reality just running C++ code behind the scenes.
+
+Node.js is able to teach JavaScript new things by providing C++ bindings to V8: This allows JS in essence to do anything that C++ can
+do, and C++ can indeed acces the file system, so now JS can acces the file system through Node 
+
+
+---------> WHY?
+- Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient:
+I/O: input/output. That operations take time. With Node we get non-blocking I/O, that means that while the node application is 
+waiting for a response (ex. database respone), it can continue to process other code and make other requests.
+event-driven: is the process of registering the callbacks and having them call when the I/O operation is done
+
+- Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
+
+
+
