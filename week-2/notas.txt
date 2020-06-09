@@ -39,5 +39,30 @@ event-driven: is the process of registering the callbacks and having them call w
 
 - Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
 
+/* 
+console.log('Starting')
+
+setTimeout(() => {
+    console.log('2 second timer')
+}, 2000)
+
+setTimeout(() => {
+    console.log('0 Second Timer')
+}, 0)
+
+console.log('Stopping')
+
+*/
+
+// Console result:
+// Starting
+// Stopping
+// 0 Second Timer
+// 2 second timer
+
+// Reason:
+// The Event Loop can't run any of our asynchronous callbacks until the Call Stack is empty, so
+// none of our asynchrounus callbacks are ever going to run before the main function is done
+
 
 
