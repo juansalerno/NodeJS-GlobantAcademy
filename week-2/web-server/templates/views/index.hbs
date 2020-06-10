@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Weather</title>
+    <link rel="icon" href="/img/weather.png">
     <link rel="stylesheet" href="/css/styles.css">
     <!-- here use absolute paths (without the dot (".") at the beginning), this is relative to the web server route, wich is set up 
         as the public folder-->
@@ -12,7 +13,10 @@
 </head>
 
 <body>
-    {{>header}}
+    <div class="main-content">
+        {{>header}}
+        <p>Use this site to get your weather</p>
+    </div>
 
     {{>footer}}
 </body>

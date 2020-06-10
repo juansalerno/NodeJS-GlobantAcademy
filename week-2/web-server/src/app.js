@@ -29,7 +29,7 @@ app.get('', (req, res) => {
 
 app.get('/about', (req, res) => {
     res.render('about', {
-        title: 'About',
+        title: 'About Me',
         name: 'Juan Ignacio Salerno'
     })
 })
@@ -49,6 +49,24 @@ app.get('/weather', (req, res) => {
     })
 })
 
+// 404 handlers
+// Specific:
+app.get('/help/*', (req, res) => {
+    res.render('404', {
+        title: '404',
+        name: 'Juan Ignacio Salerno',
+        msg404: 'Help article not found'
+    })
+})
+
+// Generic
+app.get('*', (req, res) => {
+    res.render('404', {
+        title: '404',
+        name: 'Juan Ignacio Salerno',
+        msg404: 'Page not found'
+    }) // MUST be at the end, so matches things that has not matched before
+})
 
 
 app.listen(3000, () => {
