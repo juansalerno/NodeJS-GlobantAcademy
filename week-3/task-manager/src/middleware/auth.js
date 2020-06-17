@@ -18,6 +18,10 @@ const auth = async (req, res, next) => {
 
         // add a property onto request to store the user, so the root handlers will be able to acces it later on:
         req.user = user
+
+        // add a property onto request to store the token, so the root handlers will be able to acces it later on:
+        req.token = token
+        
         next()
     } catch (e) {
         res.status(401).send({error: 'Please authenticate.'})

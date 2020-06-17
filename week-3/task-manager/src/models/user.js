@@ -60,6 +60,16 @@ userSchema.methods.generateAuthToken = async function () { // standard function 
     return token
 }
 
+userSchema.methods.toJSON = function () { // when we pass an object to res.send(), Express is calling JSON.stringify(object) behind the scenes
+    const user = this
+    const userObject = user.toObject() // mongoose method, give us the raw profile data, (making one object)
+
+    delete userObject.password
+    delete userObject.tokens
+
+    return userObject
+}
+
 
 // statics methods are accesible on the model (called Model Methods)
 userSchema.statics.findByCredentials = async (email, password) => {

@@ -50,7 +50,7 @@ router.patch('/tasks/:id', async (req, res) => {
     }
 
     try {
-        const task = await Task.findById(req.params.id)
+        const task = await Task.findById(req.params.id) // mongoose automatically converts the string ids into ObjectIDs for us
         
         // const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
         
