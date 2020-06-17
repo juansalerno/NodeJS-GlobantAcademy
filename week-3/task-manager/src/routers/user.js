@@ -57,7 +57,6 @@ router.get('/users/me', auth, async (req, res) => {
 })
 
 
-
 router.patch('/users/me', auth, async (req, res) => {
     const updates = Object.keys(req.body) // return an array of string with each property of the req.body object
     const allowedUpdates = ['name', 'email', 'password', 'age']

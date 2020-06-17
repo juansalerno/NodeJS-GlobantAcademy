@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Task = require('../models/task')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -47,6 +48,13 @@ const userSchema = new mongoose.Schema({
             required: true
         }
     }]
+})
+
+// Set up a virtual property (it is NOT stored in the database, is a relationship between 2 entities)
+userSchema.virtual('tasks', {
+    ref: 'Task',
+    localField: '_id', // where the local datails stored
+    foreignField: 'owner' // the name of the field on the other thing
 })
 
 // methods are accesible on the instances (called Instance Methods)
@@ -98,6 +106,14 @@ userSchema.pre('save', async function (next) { // standard function is required 
 
     next()
 })
+
+// Delete user tasks when user is removed
+userSchema.pre('remove', async function (next) {
+    const user = this
+    await Task.deleteMany({owner: user._id})
+    next()
+})
+
 
 const User = mongoose.model('User', userSchema)
 
