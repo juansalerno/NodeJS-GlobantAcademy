@@ -38,6 +38,10 @@ io.on('connection', (socket) => {
         
         socket.emit('message', generateMessage('Admin', 'Welcome!'))
         socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined!`)) 
+        io.to(user.room).emit('roomData', {
+            room: user.room,
+            users: getUsersInRoom(user.room)
+        })
 
         callback()
     })
@@ -65,10 +69,12 @@ io.on('connection', (socket) => {
 
         if (user) {
             io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left!`)) // no usas broadcast porque ese usuario ya se desconectó, entonces él no estaría incluido al mandarle a todos
+            io.to(user.room).emit('roomData', {
+                room: user.room,
+                users: getUsersInRoom(user.room)
+            })
         }
-
-    })
-    
+    })   
 })
 
 server.listen(port, () => {
