@@ -2,21 +2,44 @@ const express = require('express')
 const Task = require('../models/task')
 const auth = require('../middleware/auth')
 const router = new express.Router()
+const multer = require('multer')
+const sharp = require('sharp')
 
 
-router.post('/tasks', auth, async (req, res) => {
-    const task = new Task({
-        ...req.body,
-        owner: req.user._id
-    })
+// Setting up multer:
+const upload = multer({
+    limits: {
+        fileSize: 1500000
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Please upload an image'))
+        }
 
+        cb(undefined, true)
+    }
+})
+
+
+router.post('/tasks', auth, upload.single('image'), async (req, res) => {
     try {
+
+        const task = new Task({
+            ...JSON.parse(req.body.task),
+            owner: req.user._id
+        })
+
+        if (req.file) {
+            task.image = await sharp(req.file.buffer).png().toBuffer()
+        }
+
         await task.save()
         res.status(201).send(task)
     } catch (e) {
         res.status(400).send(e)
     }
 })
+
 
 //  GET /tasks?completed=false  --> FILTERING DATA
 //  GET /tasks?limit=10&skip=0  --> PAGINATING DATA
@@ -67,6 +90,24 @@ router.get('/tasks/:id', auth, async (req, res) => {
     }
 })
 
+
+// Read task image from the browser:
+router.get('/tasks/:id/image', async (req, res) => {
+    try {
+        const task = await Task.findById(req.params.id)
+
+        if (!task || !task.image) {
+            throw new Error()
+        }
+
+        res.set('Content-Type', 'image/png') // setting up the response header (because it is not JSON)
+        res.send(task.image)
+    } catch (e) {
+        res.status(404).send()
+    }
+})
+
+
 router.patch('/tasks/:id', auth, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['description', 'completed']
@@ -102,6 +143,25 @@ router.delete('/tasks/:id', auth, async (req, res) => {
         }
 
         res.send(task)
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
+
+// Delete image from a task:
+router.delete('/tasks/:id/image', auth, async (req, res) => {
+    try {
+        
+        const task = await Task.findById(req.params.id)
+        
+        if (!task || task.image === null) {
+            return res.status(404).send()
+        }
+
+        task.image = null
+        await task.save()
+        res.send()
     } catch (e) {
         res.status(500).send()
     }
