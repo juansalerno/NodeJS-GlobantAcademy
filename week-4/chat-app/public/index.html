@@ -6,22 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
     <link rel="icon" href="/img/favicon.png">
-    <link rel="stylesheet" href="/css/styles.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
-   <div class="centered-form">
-       <div class="centered-form__box">
-           <h1>Join</h1>
-           <form action="/chat.html">
-               <label>Display name</label>
-               <input type="text" name="username" placeholder="Display name" required>
-               <label>Room</label>
-               <input type="text" name="room" placeholder="Room" required>
-               <button>Join</button>
-           </form>
-       </div>
-   </div>
+    <div class="centered-form">
+        <div class="centered-form__box">
+            <h1>Join</h1>
+            <form action="/chat.html">
+                <label>Display name</label>
+                <input class="name-input" type="text" name="username" placeholder="Display name" required>
+                <label>Insert the room:</label>
+                <input class="room-input" type="text" name="room" placeholder="Room" required>
+                <label for="active">Or choose an active room:</label>
+
+                <div class="dropdown">
+                    <select id="active">
+                        <option disabled selected>Active Rooms</option>
+
+                    </select>
+                </div>
+                <button>Join</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/rooms.js"></script>
 </body>
 
 </html>

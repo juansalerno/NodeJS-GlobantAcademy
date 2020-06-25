@@ -6,6 +6,7 @@ const Filter = require('bad-words')
 const { generateMessage, generateLocationMessage } = require('./utils/messages')
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users')
 
+
 const app = express()
 const server = http.createServer(app)
 const io = socketio(server)
@@ -16,16 +17,12 @@ const publicDirectoryPath = path.join(__dirname, '../public')
 
 app.use(express.static(publicDirectoryPath))
 
-// socket.emit --> emit to that particular connection, 
-// io.emit --> send it to all connections, 
-// socket.broadcast.emit --> emit to everybody except this particular connection
-
-// in rooms:
-// io.to(room).emit --> emits an event to everybody to an especific room
-// socket.broadcast.to(room).emit --> emits an event to everybody to an especific room except for the especific client
+const activeRooms = []
 
 io.on('connection', (socket) => {
     console.log('New WebSocket connection')
+
+    io.emit('activeRooms', activeRooms)
 
     socket.on('join', (options, callback) => {
         const { error, user } = addUser({ id: socket.id, ...options })
@@ -34,8 +31,15 @@ io.on('connection', (socket) => {
             return callback(error)
         }
 
-        socket.join(user.room)
+        socket.join(user.room)   
+
+        const newRoom = activeRooms.every(room => room !== user.room)
         
+        if (newRoom) {
+            activeRooms.push(user.room)
+            io.emit('activeRooms', activeRooms)
+        } 
+
         socket.emit('message', generateMessage('Admin', 'Welcome!'))
         socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined!`)) 
         io.to(user.room).emit('roomData', {
@@ -68,7 +72,14 @@ io.on('connection', (socket) => {
         const user = removeUser(socket.id)
 
         if (user) {
-            io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left!`)) // no usas broadcast porque ese usuario ya se desconectó, entonces él no estaría incluido al mandarle a todos
+            const index = activeRooms.findIndex(room => room === user.room)
+
+            if (getUsersInRoom(activeRooms[index]).length <= 0) {
+                activeRooms.splice(index, 1)
+                io.emit('activeRooms', activeRooms)
+            }
+
+            io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left!`)) 
             io.to(user.room).emit('roomData', {
                 room: user.room,
                 users: getUsersInRoom(user.room)

@@ -28,11 +28,11 @@ label {
     display: block;
     font-size: 14px;
     margin-bottom: 8px;
-    color: #777;
+    color: rgb(82, 82, 82);
 }
 
 input {
-    border: 1px solid #eeeeee;
+    border: 1.2px solid #bdbcbc;
     padding: 12px;
     outline: none;
 }
@@ -81,6 +81,11 @@ button:disabled {
 .centered-form input {
     margin-bottom: 16px;
     width: 100%;
+}
+
+select {
+    width: 100%;
+    margin-bottom: 5%;
 }
 
 /* Chat Page Layout */
@@ -149,7 +154,7 @@ button:disabled {
 }
 
 .compose input {
-    border: 1px solid #eeeeee;
+    border: 1.2px solid #bdbcbc;
     width: 100%;
     padding: 12px;
     margin: 0 16px 0 0;
