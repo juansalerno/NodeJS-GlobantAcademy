@@ -6,33 +6,7 @@ const multer = require('multer')
 const sharp = require('sharp')
 const router = new express.Router()
 
-/**
- * @swagger
- * 
- * /users:
- *   post:
- *      tags:
- *       - New User
- *      summary: This should create a new new user.
- *      description: This is where you can give some background as to why this route is being created or perhaps reference a ticket number.
- *   consumes:
- *     description: Creates a user
- *   produces:
- *       - application/json
- *   parameters:
- *       - name: user
- *         description: User object
- *         in:  body
- *         required: true
- *         type: string
- *         schema:
- *           $ref: '#/src/models/User'
- *   responses:
- *       200:
- *         description: new user created and saved it in database
- *         schema:
- *           $ref: '#/definitions/User'
- */
+
 router.post('/', async (req, res) => {
     const user = new User(req.body)
 
