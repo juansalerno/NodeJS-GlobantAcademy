@@ -2,20 +2,29 @@ const socket = io()
 
 const $dropdown = document.querySelector('#active')
 const $messageFormInput = document.querySelector('.room-input')
+const activeRoomsDropdownTemplate = document.querySelector('#activeRooms-dropdown-template').innerHTML
+const $activeRoomsList = document.querySelector('#activeRooms-list')
 
 socket.on('activeRooms', (rooms) => {
-    let html = '<option disabled selected>Active Rooms</option>'
+   
+    let html = `
+    <select id="active"> 
+    <option value="" disabled selected> Active Rooms </option>  
+    </select>
+    `
     if (rooms.length > 0) {
-        rooms.forEach(room => {
-            html += ` <option class="room" value="${room}">${room}</option>`
-            $dropdown.innerHTML = html
+        html = Mustache.render(activeRoomsDropdownTemplate, {
+            rooms
         })
+        
+        $activeRoomsList.innerHTML = html
+
     } else {
-        $dropdown.innerHTML = html
+        $activeRoomsList.innerHTML = html
     }
 })
 
-$dropdown.addEventListener('change', (e) => {
+$activeRoomsList.addEventListener('change', (e) => {
     let element = e.target
     element.addEventListener('click', (ev) => {
         $messageFormInput.value = ev.target.value

@@ -14,19 +14,28 @@
         <div class="centered-form__box">
             <h1>Join</h1>
             <form action="/chat.html">
+
                 <label>Display name</label>
                 <input class="name-input" type="text" name="username" placeholder="Display name" required>
+
                 <label>Insert the room:</label>
                 <input class="room-input" type="text" name="room" placeholder="Room" required>
+
                 <label for="active">Or choose an active room:</label>
+                <div id="activeRooms-list"></div>
 
-                <div class="dropdown">
+                
+                <script id="activeRooms-dropdown-template" type="text/html">
                     <select id="active">
-                        <option disabled selected>Active Rooms</option>
-
+                        <option value="" disabled selected>Active Rooms</option>
+                        {{#rooms}}
+                            <option value="{{.}}">{{ . }}</option>
+                        {{/rooms}}
                     </select>
-                </div>
+                </script>
+                
                 <button>Join</button>
+                
             </form>
         </div>
     </div>

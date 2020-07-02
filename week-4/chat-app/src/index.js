@@ -4,7 +4,7 @@ const express = require('express')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
 const { generateMessage, generateLocationMessage } = require('./utils/messages')
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users')
+const { addUser, removeUser, getUser, getUsersInRoom, getUserByName } = require('./utils/users')
 
 
 const app = express()
@@ -40,7 +40,9 @@ io.on('connection', (socket) => {
             io.emit('activeRooms', activeRooms)
         } 
 
-        socket.emit('message', generateMessage('Admin', 'Welcome!'))
+        socket.emit('message', generateMessage('Admin', `Welcome! `))
+        socket.emit('message', generateMessage('Admin', `You can send a private message to any user in the room typing @ plus the user name. Example: @username Hello!`))
+
         socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined!`)) 
         io.to(user.room).emit('roomData', {
             room: user.room,
@@ -56,6 +58,22 @@ io.on('connection', (socket) => {
         const filter = new Filter()
         if (filter.isProfane(message)) {
             return callback('Profanity is not allowed!')
+        }
+
+        if (message.startsWith('@')) {
+            const index = message.indexOf(' ')
+            const userDestName = message.substring(1, index)
+            
+            const userDest = getUserByName(userDestName)
+            if (!userDest) {
+                return callback('That user  is not in the room')
+            }
+            
+            const msg = message.substring(index + 1)
+            
+            io.to(socket.id).emit('message', generateMessage(user.username, message))
+            io.to(userDest.id).emit('message', generateMessage(user.username, msg))
+            return callback()
         }
 
         io.to(user.room).emit('message', generateMessage(user.username, message)) 
